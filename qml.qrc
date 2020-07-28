@@ -1,0 +1,18 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>HomeForm.ui.qml</file>
+        <file>Page1Form.ui.qml</file>
+        <file>Page2Form.ui.qml</file>
+        <file>qtquickcontrols2.conf</file>
+        <file>images/heading.png</file>
+        <file>images/presentation_01.png</file>
+        <file>images/presentation_02.png</file>
+        <file>images/star.png</file>
+        <file>images/particleA.png</file>
+        <file>images/particle.png</file>
+        <file>images/particle2.png</file>
+        <file>images/textflare.png</file>
+        <file>heading.js</file>
+    </qresource>
+</RCC>
