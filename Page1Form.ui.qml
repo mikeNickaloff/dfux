@@ -4,7 +4,7 @@ import QtQuick.Controls 2.5
 Page {
     width: 800
     height: 600
-
+signal emitSparks(var xPos, var yPos, var numberOfParticles)
     title: qsTr("Page 1")
     anchors.fill: parent
     Image {

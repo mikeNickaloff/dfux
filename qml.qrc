@@ -14,5 +14,7 @@
         <file>images/particle2.png</file>
         <file>images/textflare.png</file>
         <file>heading.js</file>
+        <file>Page3.qml</file>
+        <file>Page3Box1.qml</file>
     </qresource>
 </RCC>

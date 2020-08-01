@@ -16,7 +16,7 @@ ApplicationWindow {
         id: headerPane
 
         Label {
-            text: stackView.currentItem.title
+            text: "datafault ux presentation"
             anchors.centerIn: parent
             opacity: 0.01
         }
@@ -26,7 +26,12 @@ ApplicationWindow {
         //            anchors.fill: parent
         //            property var pathString
         //            property var pathPctArray: []
-        //            onClicked: {
+        //            property var isPressed: false
+        //            onPressed: {
+        //                isPressed = true
+        //            }
+
+        //            onPositionChanged: {
         //                pathString += " L " + mouse.x + " " + mouse.y
         //                var pctX = mapToItem(ps2, mouse.x, mouse.y).x / ps2.width
         //                var pctY = mapToItem(ps2, mouse.x, mouse.y).y / ps2.height
@@ -34,7 +39,8 @@ ApplicationWindow {
         //                                      "x": pctX,
         //                                      "y": pctY
         //                                  })
-
+        //            }
+        //            onReleased: {
         //                console.log(JSON.stringify(pathPctArray))
         //            }
         //        }
@@ -62,6 +68,8 @@ ApplicationWindow {
                     onClicked: {
                         stackView.push("Page1Form.ui.qml")
                         drawer.close()
+                        littleSparksAnim.running = true
+                        littleSparksAnim.restart()
                     }
                 }
                 ItemDelegate {
@@ -71,6 +79,20 @@ ApplicationWindow {
                     onClicked: {
                         stackView.push("Page2Form.ui.qml")
                         drawer.close()
+                        littleSparksAnim.running = true
+                        littleSparksAnim.restart()
+                    }
+                }
+                ItemDelegate {
+                    text: qsTr("Page 3")
+                    font.pixelSize: parent.height * 0.09
+                    width: parent.width
+                    onClicked: {
+                        stackView.push("Page3.qml")
+
+                        drawer.close()
+                        littleSparksAnim.running = true
+                        littleSparksAnim.restart()
                     }
                 }
             }
@@ -89,13 +111,20 @@ ApplicationWindow {
             width: parent.width
             height: parent.height
             id: ps2
+            function emitSparks(xPos, yPos, numParticles, targetContextObject) {
+                var _x = ps2.mapFromItem(targetContextObject, xPos, yPos).x
+                var _y = ps2.mapFromItem(targetContextObject, xPos, yPos).y
+                sparkEmitter.x = _x
+                sparkEmitter.y = _y
+                sparkEmitter.burst(numParticles)
+            }
             SequentialAnimation {
                 running: true
                 ParallelAnimation {
                     PropertyAnimation {
                         target: headingImage
                         property: "opacity"
-                        duration: 10000
+                        duration: 7000
                         to: 1.0
                         easing.type: Easing.InOutQuad
                     }
@@ -103,8 +132,8 @@ ApplicationWindow {
                         target: sparkEmitter
                         property: "size"
                         duration: 10000
-                        from: 376
-                        to: 76
+                        from: 70
+                        to: 0
                         easing.type: Easing.InCubic
                     }
                     PropertyAnimation {
@@ -112,16 +141,16 @@ ApplicationWindow {
                         property: "lifeSpan"
                         duration: 10000
                         from: 2000
-                        to: 200
+                        to: 500
                         easing.type: Easing.InCubic
                     }
                     PropertyAnimation {
                         target: sparkEmitter
                         property: "emitRate"
                         duration: 10000
-                        from: 50
-                        to: 19
-                        easing.type: Easing.InCubic
+                        from: 13
+                        to: 5
+                        easing.type: Easing.OutInElastic
                     }
 
                     PathAnimation {
@@ -136,7 +165,7 @@ ApplicationWindow {
                         }
                         orientation: PathAnimation.Fixed
 
-                        duration: 10000
+                        duration: 6000
                         loops: 1
 
                         target: sparkEmitter
@@ -153,7 +182,9 @@ ApplicationWindow {
                     script: {
                         sparkEmitter.emitRate = 19
                         sparkEmitter.enabled = false
-                        stackView.push("Page1Form.ui.qml")
+                        //stackView.push("Page1Form.ui.qml")
+                        //  littleSparksAnim.running = true
+                        //  littleSparksAnim.restart()
                     }
                 }
             }
@@ -167,30 +198,49 @@ ApplicationWindow {
                         sparkEmitter.enabled = true
                     }
                 }
-                PathAnimation {
-
-                    path: Path {
-
-                        PathSvg {
-
-                            path: JS.generate_path_from_pct_array(
-                                      ps2, JS.reverse(JS.headingBottomPoints))
-                        }
+                ParallelAnimation {
+                    PropertyAnimation {
+                        target: sparkEmitter
+                        property: "size"
+                        duration: 15000
+                        from: 150
+                        to: 16
+                        easing.type: Easing.OutInSine
                     }
-                    orientation: PathAnimation.Fixed
+                    PropertyAnimation {
+                        target: sparkEmitter
+                        property: "lifeSpan"
+                        duration: 12000
+                        from: 4000
+                        to: 200
+                        easing.type: Easing.InQuart
+                    }
 
-                    duration: 4000
-                    loops: 1
+                    PathAnimation {
 
-                    target: sparkEmitter
+                        path: Path {
+
+                            PathSvg {
+
+                                path: JS.generate_path_from_pct_array(
+                                          ps2, JS.pageChangePoints)
+                            }
+                        }
+                        orientation: PathAnimation.Fixed
+
+                        duration: 4000
+                        loops: 1
+
+                        target: sparkEmitter
+                    }
+                    PropertyAnimation {
+                        target: sparkEmitter
+                        property: "emitRate"
+                        duration: 7000
+                        to: 0
+                    }
                 }
 
-                PropertyAnimation {
-                    target: sparkEmitter
-                    property: "emitRate"
-                    duration: 5000
-                    to: 0
-                }
                 ScriptAction {
                     script: {
                         sparkEmitter.emitRate = 19
@@ -249,26 +299,26 @@ ApplicationWindow {
                 enabled: true
                 group: "spark"
                 emitRate: 19
-                maximumEmitted: 25
+                maximumEmitted: 200
                 startTime: 0
                 lifeSpan: 200
                 lifeSpanVariation: 1200
                 size: 76
                 sizeVariation: 90
                 endSize: 7
-                velocityFromMovement: -83
+                velocityFromMovement: 10
                 system: ps2
                 velocity: PointDirection {
-                    x: 0
-                    xVariation: 70
-                    y: -59
-                    yVariation: -43
+                    x: 20
+                    xVariation: 60
+                    y: 20
+                    yVariation: 40
                 }
                 acceleration: AngleDirection {
                     angle: 0
                     angleVariation: 90
-                    magnitude: 27
-                    magnitudeVariation: 46
+                    magnitude: 7
+                    magnitudeVariation: 4
                 }
                 shape: LineShape {
                     mirrored: false
@@ -289,11 +339,10 @@ ApplicationWindow {
                 if (drawer.visible !== true) {
                     drawer.open()
                     sparkEmitter.burst(75)
-                    littleSparksAnim.running = true
                 } else {
 
                     drawer.close()
-                    littleSparksAnim.running = true
+
                     sparkEmitter.burst(75)
                 }
             }
@@ -302,14 +351,21 @@ ApplicationWindow {
 
     StackView {
         id: stackView
-        initialItem: "HomeForm.ui.qml"
+        initialItem: "Page1Form.ui.qml"
         anchors.fill: parent
+        StackView.onActivated: {
+            stackView.currentItem.emitSparks.connect(
+                        function (xPos, yPos, numParticles) {
+                            ps2.emitSparks(xPos, yPos, numParticles,
+                                           stackView.currentItem)
+                        })
+        }
         pushEnter: Transition {
             PropertyAnimation {
                 property: "opacity"
                 from: 0
                 to: 1
-                duration: 4990
+                duration: 7000
             }
         }
         pushExit: Transition {
@@ -317,7 +373,7 @@ ApplicationWindow {
                 property: "opacity"
                 from: 1
                 to: 0
-                duration: 5000
+                duration: 4000
             }
         }
         popEnter: Transition {
