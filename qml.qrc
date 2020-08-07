@@ -2,8 +2,8 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>HomeForm.ui.qml</file>
-        <file>Page1Form.ui.qml</file>
-        <file>Page2Form.ui.qml</file>
+        <file>Page1Form.qml</file>
+        <file>Page2Form.qml</file>
         <file>qtquickcontrols2.conf</file>
         <file>images/heading.png</file>
         <file>images/presentation_01.png</file>
@@ -16,5 +16,7 @@
         <file>heading.js</file>
         <file>Page3.qml</file>
         <file>Page3Box1.qml</file>
+        <file>GreenButton.qml</file>
+        <file>Page4.qml</file>
     </qresource>
 </RCC>

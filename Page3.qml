@@ -3,11 +3,14 @@ import QtQuick.Controls 2.5
 import QtQuick.Particles 2.12
 
 Page {
+    id: page
     width: 800
     height: 600
     anchors.fill: parent
     signal emitSparks(var xPos, var yPos, var numberOfParticles)
-    id: pageRoot
+    signal nextSlide(var newPage)
+
+    property alias pageRoot: page
     title: qsTr("Page 3")
     ScrollView {
         width: parent.width
@@ -143,5 +146,25 @@ Page {
         //                }
         //            }
         //        }
+    }
+    GreenButton {
+        text: "Next"
+        x: parent.width * 0.65
+        y: parent.height * 0.10
+        width: parent.width * 0.25
+        height: parent.height * 0.10
+        onClicked: {
+            nextSlide("Page2Form.qml")
+        }
+    }
+    MouseArea {
+        x: parent.width * 0.65
+        y: parent.height * 0.10
+        width: parent.width * 0.25
+        height: parent.height * 0.10
+        onPressed: {
+            page.nextSlide("Page4.qml")
+            console.log("Button Pressed")
+        }
     }
 }

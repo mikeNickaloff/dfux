@@ -66,7 +66,7 @@ ApplicationWindow {
                     font.pixelSize: parent.height * 0.15
                     width: parent.width
                     onClicked: {
-                        stackView.push("Page1Form.ui.qml")
+                        stackView.push("Page1Form.qml")
                         drawer.close()
                         littleSparksAnim.running = true
                         littleSparksAnim.restart()
@@ -77,7 +77,7 @@ ApplicationWindow {
                     font.pixelSize: parent.height * 0.15
                     width: parent.width
                     onClicked: {
-                        stackView.push("Page2Form.ui.qml")
+                        stackView.push("Page2Form.qml")
                         drawer.close()
                         littleSparksAnim.running = true
                         littleSparksAnim.restart()
@@ -351,14 +351,33 @@ ApplicationWindow {
 
     StackView {
         id: stackView
-        initialItem: "Page1Form.ui.qml"
+        initialItem: "Page1Form.qml"
         anchors.fill: parent
-        StackView.onActivated: {
+        onCurrentItemChanged: {
             stackView.currentItem.emitSparks.connect(
                         function (xPos, yPos, numParticles) {
                             ps2.emitSparks(xPos, yPos, numParticles,
                                            stackView.currentItem)
                         })
+            stackView.currentItem.nextSlide.connect(function (page) {
+                stackView.push(page)
+            })
+        }
+        replaceEnter: Transition {
+            PropertyAnimation {
+                property: "opacity"
+                from: 0
+                to: 1
+                duration: 7000
+            }
+        }
+        replaceExit: Transition {
+            PropertyAnimation {
+                property: "opacity"
+                from: 1
+                to: 0
+                duration: 4000
+            }
         }
         pushEnter: Transition {
             PropertyAnimation {
